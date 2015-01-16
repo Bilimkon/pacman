@@ -120,7 +120,7 @@ class SearchAgent(Agent):
     i = self.actionIndex
     self.actionIndex += 1
     if i < len(self.actions):
-      return self.actions[i]    
+      return self.actions[i]
     else:
       return Directions.STOP
 
@@ -159,7 +159,7 @@ class PositionSearchProblem(search.SearchProblem):
 
   def isGoalState(self, state):
      isGoal = state == self.goal 
-     
+     #print state
      # For display purposes only
      if isGoal:
        self._visitedlist.append(state)
@@ -266,7 +266,7 @@ class CornersProblem(search.SearchProblem):
      |
      |
      |
-     |_________________  x   (x, y)
+     |_________________  x   (x, y), start from 1
 
   """
   
@@ -285,17 +285,26 @@ class CornersProblem(search.SearchProblem):
     
     "*** YOUR CODE HERE ***"
     self._visited, self._visitedlist = {}, []
-    self.corner_tate = (0, 0, 0, 0)
-    self.start = (self.startingPosition, self.corner_tate)
+    self.startState = (self.startingPosition, (0, 0, 0, 0))
     
   def getStartState(self):
     "Returns the start state (in your state space, not the full Pacman state space)"
-    return self.start
+    return self.startState
     
   def isGoalState(self, state):
     "Returns whether this search state is a goal state of the problem"
     "*** YOUR CODE HERE ***"
-    return 0 not in state[1]
+    isGoal = not(0 in state[1])
+
+    # For display purposes only
+    if isGoal:
+      self._visitedlist.append(state[0])
+      import __main__
+      if '_display' in dir(__main__):
+        if 'drawExpandedCells' in dir(__main__._display): #@UndefinedVariable
+          __main__._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
+
+    return isGoal
        
   def getSuccessors(self, state):
     """
@@ -340,7 +349,7 @@ class CornersProblem(search.SearchProblem):
     # Bookkeeping for display purposes
     if state not in self._visited:
       self._visited[state] = True
-      self._visitedlist.append(state)
+      self._visitedlist.append(state[0])
 
     self._expanded += 1
     return successors
@@ -357,7 +366,6 @@ class CornersProblem(search.SearchProblem):
       x, y = int(x + dx), int(y + dy)
       if self.walls[x][y]: return 999999
     return len(actions)
-
 
 def cornersHeuristic(state, problem):
   """
@@ -377,8 +385,6 @@ def cornersHeuristic(state, problem):
   walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
   
   "*** YOUR CODE HERE ***"
-  #return 0 # Default to trivial solution
-
   # use heuristic of sub problem, the 3 sub manhattanHeuristic
   position = state[0]
   corner_state = list(state[1])
