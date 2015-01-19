@@ -285,7 +285,12 @@ class CornersProblem(search.SearchProblem):
     
     "*** YOUR CODE HERE ***"
     self._visited, self._visitedlist = {}, []
-    self.startState = (self.startingPosition, (0, 0, 0, 0))
+    corner_state = [0, 0, 0, 0]
+    # check if start position is in any corner
+    if self.startingPosition in self.corners:
+      idx = self.corners.index(self.startingPosition)
+      corner_state[idx] = 1
+    self.startState = (self.startingPosition, tuple(corner_state))
     
   def getStartState(self):
     "Returns the start state (in your state space, not the full Pacman state space)"
@@ -388,7 +393,7 @@ def cornersHeuristic(state, problem):
   # use heuristic of sub problem, the 3 sub manhattanHeuristic
   position = state[0]
   corner_state = list(state[1])
-  #print corner_state
+  print corner_state
 
   if position in corners:
     corner_state[corners.index(position)] = 1
@@ -438,7 +443,7 @@ def cornersHeuristic(state, problem):
     else:
       cost += (right - 1) + (top - 1)
 
-  #print "heuristic: ", cost
+  print "heuristic: ", cost
   return cost
 
 class AStarCornersAgent(SearchAgent):

@@ -202,6 +202,11 @@ def uniformCostSearch(problem):
   but in this project, A* search algorithm need cost estimation
   '''
   "*** YOUR CODE HERE ***"
+  print "Start:", problem.getStartState()
+  print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+  print "Start's successors:", problem.getSuccessors(problem.getStartState())
+  print problem
+
   frontier = util.PriorityQueue()
   visited = dict()
 
@@ -251,6 +256,11 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
   "Search the node that has the lowest combined cost and heuristic first."
   "*** YOUR CODE HERE ***"
+  print "Start:", problem.getStartState()
+  print "Is the start a goal?", problem.isGoalState(problem.getStartState())
+  print "Start's successors:", problem.getSuccessors(problem.getStartState())
+  print problem
+
   frontier = util.PriorityQueue()
   visited = dict()
 
@@ -269,6 +279,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     state = node["state"]
     cost = node["cost"]
     v = node["eval"]
+    #print state
 
     if visited.has_key(state):
       continue
