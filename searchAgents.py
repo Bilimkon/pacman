@@ -393,6 +393,58 @@ def cornersHeuristic(state, problem):
   # use heuristic of sub problem, the 3 sub manhattanHeuristic
   position = state[0]
   corner_state = list(state[1])
+
+  if problem.isGoalState(state):
+    return 0
+
+  unvisited_corners = []
+  for idx in range(len(corners)):
+    if corner_state[idx] == 0:
+      unvisited_corners.append(corners[idx])
+
+  current_pos = position
+  cost = 0
+  while len(unvisited_corners) != 0:
+    idx, dist = findClosestCorner(current_pos, unvisited_corners)
+    cost += dist
+    current_pos = unvisited_corners[idx]
+    unvisited_corners.remove(unvisited_corners[idx])
+
+  #print "heuristic: ", cost
+  return cost
+
+def findClosestCorner(current_pos, corners):
+  idx = -1
+  min_dist = None
+  for i in range(len(corners)):
+    dist = util.manhattanDistance(current_pos, corners[i])
+    if min_dist == None or min_dist > dist:
+      min_dist = dist
+      idx = i
+
+  return idx, min_dist
+
+def cornersHeuristic2(state, problem):
+  """
+  A heuristic for the CornersProblem that you defined.
+  
+    state:   The current search state 
+             (a data structure you chose in your search problem)
+    
+    problem: The CornersProblem instance for this layout.  
+    
+  This function should always return a number that is a lower bound
+  on the shortest path from the state to a goal of the problem; i.e.
+  it should be admissible.  (You need not worry about consistency for
+  this heuristic to receive full credit.)
+  """
+  corners = problem.corners # These are the corner coordinates
+  walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
+  
+  "*** YOUR CODE HERE ***"
+  # use heuristic of sub problem, the 3 sub manhattanHeuristic
+  position = state[0]
+  corner_state = list(state[1])
   #print corner_state
 
   if problem.isGoalState(state):
