@@ -507,7 +507,6 @@ class FoodSearchProblem:
     self.startingGameState = startingGameState
     self._expanded = 0
     self.heuristicInfo = {} # A dictionary for the heuristic to store information
-
       
   def getStartState(self):
     print self.startingGameState.getFood().packBits()
@@ -577,7 +576,10 @@ def foodHeuristic(state, problem):
   """
   position, foodGrid = state
   "*** YOUR CODE HERE ***"
-  return 0
+  # this easy way of heuristic just count the food number in food grid
+  # for trickySearch map, expanded nodes reduced from 17268 to 13226
+  food_count = foodGrid.count()
+  return food_count
   
 class ClosestDotSearchAgent(SearchAgent):
   "Search for all food using a sequence of searches"
