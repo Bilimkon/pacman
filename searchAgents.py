@@ -393,41 +393,29 @@ def cornersHeuristic(state, problem):
   # use heuristic of sub problem, the 3 sub manhattanHeuristic
   position = state[0]
   corner_state = list(state[1])
-  print corner_state
-
-  if position in corners:
-    corner_state[corners.index(position)] = 1
+  #print corner_state
 
   if problem.isGoalState(state):
     return 0
 
   cost = None
+  count = 0
   for i in range(0, 4):
     if corner_state[i] == 0:
+      count += 1
       # compute the distance to the unvisited corner
-      xy1 = position
-      xy2 = corners[i]
-      dist = abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
+      pos1 = position
+      pos2 = corners[i]
+      dist = util.manhattanDistance(pos1, pos2)
       if cost == None:
         cost = dist
       else:
         if cost > dist:
           cost = dist
 
-  if cost == None:
-    return 0
-
-  count = 0
-  for item in corner_state:
-    if item == 0:
-      count += 1
-
-  if count == 0:
-    return 0
-
   top = corners[3][1]
   right = corners[3][0]
-  small = 0
+  small = None
   if top < right:
     small = top
   else:
@@ -439,11 +427,11 @@ def cornersHeuristic(state, problem):
     cost += (top - 1) + (right - 1)
   if count == 4:
     if top < right:
-      cost += (top - 1) + (right - 1)
+      cost += 2 * (top - 1) + (right - 1)
     else:
-      cost += (right - 1) + (top - 1)
+      cost += 2 * (right - 1) + (top - 1)
 
-  print "heuristic: ", cost
+  #print "heuristic: ", cost
   return cost
 
 class AStarCornersAgent(SearchAgent):
