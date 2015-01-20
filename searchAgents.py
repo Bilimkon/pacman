@@ -405,7 +405,7 @@ def cornersHeuristic(state, problem):
   current_pos = position
   cost = 0
   while len(unvisited_corners) != 0:
-    idx, dist = findClosestCorner(current_pos, unvisited_corners)
+    idx, dist = findClosestDist(current_pos, unvisited_corners)
     cost += dist
     current_pos = unvisited_corners[idx]
     unvisited_corners.remove(unvisited_corners[idx])
@@ -413,7 +413,7 @@ def cornersHeuristic(state, problem):
   #print "heuristic: ", cost
   return cost
 
-def findClosestCorner(current_pos, corners):
+def findClosestDist(current_pos, corners):
   idx = -1
   min_dist = None
   for i in range(len(corners)):
@@ -550,6 +550,46 @@ class AStarFoodSearchAgent(SearchAgent):
     self.searchType = FoodSearchProblem
 
 def foodHeuristic(state, problem):
+  """
+  Your heuristic for the FoodSearchProblem goes here.
+  
+  This heuristic must be consistent to ensure correctness.  First, try to come up
+  with an admissible heuristic; almost all admissible heuristics will be consistent
+  as well.
+  
+  If using A* ever finds a solution that is worse uniform cost search finds,
+  your heuristic is *not* consistent, and probably not admissible!  On the other hand,
+  inadmissible or inconsistent heuristics may find optimal solutions, so be careful.
+  
+  The state is a tuple ( pacmanPosition, foodGrid ) where foodGrid is a 
+  Grid (see game.py) of either True or False. You can call foodGrid.asList()
+  to get a list of food coordinates instead.
+  
+  If you want access to info like walls, capsules, etc., you can query the problem.
+  For example, problem.walls gives you a Grid of where the walls are.
+  
+  If you want to *store* information to be reused in other calls to the heuristic,
+  there is a dictionary called problem.heuristicInfo that you can use. For example,
+  if you only want to count the walls once and store that value, try:
+    problem.heuristicInfo['wallCount'] = problem.walls.count()
+  Subsequent calls to this heuristic can access problem.heuristicInfo['wallCount']
+  """
+  position, foodGrid = state
+  "*** YOUR CODE HERE ***"
+  # compute the nearest distance to each food
+  # for trickySearch map, expanded nodes reduced from 17268 to 6422
+  current_pos = position
+  unvisited_foods = foodGrid.asList()
+  total_dist = 0
+  while len(unvisited_foods) != 0:
+    idx, dist = findClosestDist(current_pos, unvisited_foods)
+    total_dist += dist
+    current_pos = unvisited_foods[idx]
+    unvisited_foods.remove(unvisited_foods[idx])
+
+  return total_dist
+
+def foodHeuristic2(state, problem):
   """
   Your heuristic for the FoodSearchProblem goes here.
   
