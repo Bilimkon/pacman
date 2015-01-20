@@ -647,7 +647,10 @@ class ClosestDotSearchAgent(SearchAgent):
     problem = AnyFoodSearchProblem(gameState)
 
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    foods = food.asList()
+    #BFS search will find the closest food
+    path = search.breadthFirstSearch(problem)
+    return path
   
 class AnyFoodSearchProblem(PositionSearchProblem):
   """
@@ -681,9 +684,23 @@ class AnyFoodSearchProblem(PositionSearchProblem):
     that will complete the problem definition.
     """
     x,y = state
-    
+
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    foods = self.food.asList()
+    if state in foods:
+      isGoal = True
+    else:
+      isGoal = False
+    #print state
+    # For display purposes only
+    if isGoal:
+      self._visitedlist.append(state)
+      import __main__
+      if '_display' in dir(__main__):
+        if 'drawExpandedCells' in dir(__main__._display): #@UndefinedVariable
+          __main__._display.drawExpandedCells(self._visitedlist) #@UndefinedVariable
+       
+    return isGoal   
 
 ##################
 # Mini-contest 1 #
